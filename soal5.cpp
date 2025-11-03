@@ -1,105 +1,107 @@
 //Masukkan jawaban disini
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
+#include <algorithm> // Dipake buat swap di bubble sort
 
 using namespace std;
 
 // Adjacency list buat simpen graf
 vector<vector<int>> adj;
-// Array buat nyimpen hari infeksi
-// -1 artinya belum terinfeksi
-vector<int> infection_day;
-// K global buat diakses di DFS
-int K_global;
+// Array visited buat nandain node
+vector<bool> visited;
 
 /**
- * Fungsi DFS (Depth-First Search) buat simulasi virus.
- * * @param u Node (orang) saat ini.
- * @param day Hari ke-berapa node ini di-visit.
+ * Fungsi Bubble Sort[cite: 34].
+ * Mengurutkan vector secara menaik.
+ * * @param arr Vector yang mau di-sort.
  */
-void dfs(int u, int day) {
-    // 1. Optimasi: Kalo hari udah ngelewatin K, stop aja.
-    if (day > K_global) {
-        return;
-    }
-
-    // 2. Cek apakah node ini udah pernah di-visit di hari yang
-    //    lebih cepet atau sama. Kalo iya, stop path ini.
-    //    Ini penting biar kita dapet "hari" terpendek, mirip sifat BFS.
-    if (infection_day[u] != -1 && infection_day[u] <= day) {
-        return;
-    }
-
-    // 3. Catat hari infeksi node ini
-    infection_day[u] = day;
-
-    // 4. Kalo udah pas hari-K, kita gak perlu nyebarin ke tetangganya lagi,
-    //    karena tetangganya baru kena di K+1. Stop di sini.
-    if (day == K_global) {
-        return;
-    }
-
-    // 5. Langkah rekursif: kunjungi semua tetangga
-    for (int v : adj[u]) {
-        dfs(v, day + 1);
+void bubbleSort(vector<int>& arr) {
+    int n = arr.size();
+    bool swapped;
+    for (int i = 0; i < n - 1; i++) {
+        swapped = false;
+        // Loop j cuma sampe n - 1 - i
+        // karena elemen terakhir (i) udah di posisi yg bener
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+        // Kalo dalem satu iterasi gak ada yg di-swap,
+        // berarti udah urut. Langsung break.
+        if (!swapped) {
+            break;
+        }
     }
 }
 
-// (Bagian #include dan fungsi dfs() sama kayak di atas)
+/**
+ * Fungsi BFS (Breadth-First Search)[cite: 33].
+ * Mencari semua node yang terjangkau dari startNode.
+ * * @param startNode Node awal.
+ * @return Vector berisi ID teman-teman yg terjangkau (TIDAK termasuk startNode).
+ */
+vector<int> bfs(int startNode) {
+    vector<int> results;      // Buat nampung hasil [cite: 34]
+    queue<int> q;             // Queue buat BFS
+
+    // Mulai BFS
+    q.push(startNode);
+    visited[startNode] = true;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        // Cek semua tetangga v dari u
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;  // Tandain visited
+                q.push(v);          // Masukin ke queue
+                results.push_back(v); // Masukin ke hasil
+            }
+        }
+    }
+    return results;
+}
 
 int main() {
     int V, E;
-    // Baca jumlah vertex (orang) dan edge (hubungan)
-    cout << "Jumlah vertex dan edge: ";
+    // Baca jumlah vertex (teman) dan edge [cite: 35]
+    cout << "Masukkan jumlah teman dan edge: ";
     cin >> V >> E;
 
-    // Resize adjacency list & infection_day array
+    // Resize adj list & visited array
     adj.resize(V);
-    infection_day.assign(V, -1); // Inisialisasi semua -1 (belum kena)
+    visited.assign(V, false);
 
-    // --- INI BAGIAN YANG DIUBAH ---
-    cout << "Masukkan " << E << " edge (format: u v):" << endl;
-    // Baca semua edge
+    // Baca semua edge [cite: 38]
     for (int i = 0; i < E; ++i) {
         int u, v;
-        cout << "Edge " << i + 1 << ": "; // Ditambahin prompt di sini
         cin >> u >> v;
         // Graf tak berarah
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    // --- SAMPAI SINI ---
 
-    int S, K;
-    // Baca node awal (S) dan hari ke-K
-    cout << "Node Awal dan Hari Terinfeksi: ";
-    cin >> S >> K;
-    K_global = K;
+    int start;
+    // Baca titik start [cite: 39]
+    cout << "Masukkan titik start: ";
+    cin >> start;
 
-    // Mulai simulasi DFS dari node S di hari 0
-    dfs(S, 0);
+    // 1. Lakukan BFS
+    vector<int> teman = bfs(start);
 
-    vector<int> results;
-    // Kumpulin semua node yang terinfeksi TEPAT di hari ke-K
-    for (int i = 0; i < V; ++i) {
-        if (infection_day[i] == K) {
-            results.push_back(i);
-        }
+    // 2. Urutkan hasilnya pake Bubble Sort [cite: 34]
+    bubbleSort(teman);
+
+    // 3. Cetak hasil [cite: 35]
+    for (int i = 0; i < teman.size(); ++i) {
+        cout << teman[i] << (i == teman.size() - 1 ? "" : " ");
     }
-
-    cout << "Node terinfeksi: ";
-    if (results.empty()) {
-        // Cetak (TIDAK ADA) kalo gak ada
-        cout << "(TIDAK ADA)" << endl;
-    } else {
-        // Soal 3 (induk soal ini) minta diurutkan menaik
-        sort(results.begin(), results.end());
-        for (int i = 0; i < results.size(); ++i) {
-            cout << results[i] << (i == results.size() - 1 ? "" : " ");
-        }
-        cout << endl;
-    }
+    cout << endl;
 
     return 0;
 }
