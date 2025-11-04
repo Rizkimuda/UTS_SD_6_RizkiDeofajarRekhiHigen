@@ -105,3 +105,49 @@ int main() {
 
     return 0;
 }
+
+
+/*
+   --- PENJELASAN ALGORITMA (SOAL 5) ---
+  
+   1.  Tujuan: Menemukan semua teman (node yang terjangkau) dari start,
+   lalu diurut daftarnya menggunakan Bubble Sort  dan dicetak .
+  
+   2.  Struktur Data:
+   - adj (vector<vector<int>>): Adjacency list untuk representasi graf pertemanan.
+   - visited (vector<bool>): Array boolean untuk menandai node yang sudah
+   dikunjungi selama BFS, agar tidak terjadi loop tak terbatas.
+   - q (queue<int>): Queue standar untuk implementasi BFS.
+   - results (vector<int>): Vector untuk menyimpan hasil penelusuran (ID teman).
+  
+   3.  Logika BFS bfs(int startNode):
+   - Fungsi ini menerima ID pengguna awal (startNode).
+   - Masukkan startNode ke q dan tandai visited[startNode] = true.
+   - Lakukan loop while (!q.empty()):
+   - Ambil (dequeue) node u dari q.
+   - Cek semua tetangga v dari u.
+   - Jika v belum di-visit (!visited[v]):
+   - Tandai visited[v] = true.
+   - Masukkan v ke q (enqueue) untuk dikunjungi nanti.
+   - Masukkan v ke vector results. (Sesuai test case, startNode
+   sendiri tidak masuk ke daftar output).
+   - Setelah loop selesai, kembalikan results.
+  
+   4.  Logika bubbleSort(vector<int>& arr):
+   - Ini adalah implementasi standar Bubble Sort.
+   - Menggunakan dua loop for bersarang.
+   - Loop luar i berjalan dari 0 sampai n-2.
+   - Loop dalam j berjalan dari 0 sampai n-i-2.
+   - Di dalam loop j, bandingkan arr[j] dan arr[j+1]. Jika arr[j] > arr[j+1],
+   maka tukar (swap) posisi keduanya.
+   - Terdapat optimasi swapped flag. Jika dalam satu iterasi loop i
+   penuh tidak ada satupun swap yang terjadi, artinya array sudah
+   terurut dan algoritma bisa berhenti lebih awal.
+ 
+   5.  Fungsi Main:
+   - Baca input V, E, dan start[cite: 35, 38, 39].
+   - Bangun adjacency list.
+   - Panggil bfs(start) dan simpan hasilnya di vector<int> teman.
+   - Panggil bubbleSort(teman) untuk mengurutkan vector tersebut.
+   - Cetak isi vector teman yang sudah terurut.
+ */
