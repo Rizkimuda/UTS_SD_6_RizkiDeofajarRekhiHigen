@@ -39,42 +39,26 @@ int main() {
 }
 
 
-
 /* 
 Penjelasan algoritma/logika penyelesaian soal 2:
 
-1. Inisialisasi Antrian
-   Program memulai dengan membuat dua buah antrian (queue) yaitu antrian normal dan antrian darurat. 
-   Antrian normal digunakan untuk menampung pasien biasa, sedangkan antrian darurat digunakan untuk menampung pasien prioritas darurat.
+1. Programnya dimulai dengan membuat dua antrian (queue), yaitu antrian normal untuk pasien biasa 
+   dan antrian darurat untuk pasien prioritas.
 
-2. Pembacaan Perintah
-   Program membaca perintah dari pengguna menggunakan perulangan while, yang akan terus berjalan 
-   selama masih ada input. Setiap perintah bisa berupa “DATANG”, “DARURAT”, atau “LAYANI”.
+2. Program membaca setiap perintah dari input menggunakan perulangan while 
+   hingga tidak ada lagi perintah yang dimasukkan.
 
-3. Menambahkan Pasien Normal
-   Jika perintah yang dibaca adalah “DATANG <nama_pasien>”, maka nama pasien tersebut 
-   dimasukkan ke dalam antrian normal dengan perintah push() pada queue normal.
+3. Jika perintah “DATANG <nama>”, maka nama pasien dimasukkan ke antrian normal.
 
-4. Menambahkan Pasien Darurat
-   Jika perintah yang dibaca adalah “DARURAT <nama_pasien>”, maka nama pasien tersebut 
-   dimasukkan ke dalam antrian darurat dengan perintah push() pada queue darurat.
+4. Jika perintah “DARURAT <nama>”, maka nama pasien dimasukkan ke antrian darurat.
 
-5. Melayani Pasien
-   Jika perintah yang dibaca adalah “LAYANI”, maka program akan memeriksa antrian darurat terlebih dahulu.
-   Apabila antrian darurat tidak kosong, maka pasien yang berada di depan antrian darurat akan dilayani 
-   dan dikeluarkan dari antrian menggunakan perintah pop(). Jika antrian darurat kosong, maka pasien 
-   pertama dari antrian normal yang akan dilayani.
+5. Jika perintah “LAYANI”, maka program memeriksa antrian darurat terlebih dahulu. 
+   Jika tidak kosong, pasien darurat dilayani dan dihapus dari antrian. 
+   Jika kosong, pasien pertama di antrian normal yang dilayani.
 
-6. Kondisi Antrian Kosong
-   Jika perintah “LAYANI” diberikan tetapi kedua antrian kosong, maka program akan menampilkan pesan 
-   “(TIDAK ADA PASIEN)” sebagai tanda bahwa tidak ada pasien yang menunggu di sistem.
+6. Jika kedua antrian kosong saat perintah “LAYANI” diberikan, maka ditampilkan pesan 
+   “(TIDAK ADA PASIEN)”.
 
-7. Prinsip FIFO
-   Struktur data queue digunakan karena memiliki prinsip FIFO (First In First Out), di mana pasien yang 
-   datang lebih dahulu akan dilayani lebih dahulu sesuai urutan kedatangannya.
-
-8. Penghentian Program
-   Program akan terus berjalan sampai tidak ada lagi perintah yang dimasukkan oleh pengguna 
-   atau input berakhir (EOF). Setelah itu, program selesai dijalankan.
-
+7. Program menggunakan konsep FIFO (First In First Out) agar urutan pelayanan sesuai 
+   dengan waktu kedatangan pasien.
 */
