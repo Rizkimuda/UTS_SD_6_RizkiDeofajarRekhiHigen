@@ -1,8 +1,7 @@
-#include <iostream>     // untuk cout, cin
-#include <vector>       // untuk vector
-#include <queue>        // untuk queue
-#include <algorithm>    // untuk sort
-#include <utility>      // untuk pair
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
 using namespace std;
 
 int main() {
@@ -10,14 +9,12 @@ int main() {
     cout << "Jumlah vertex dan edge: ";
     cin >> V >> E;
 
-
     vector<vector<int>> graph(V);
-
     for (int i = 0; i < E; i++) {
         int u, v;
         cin >> u >> v;
         graph[u].push_back(v);
-        graph[v].push_back(u); // karena graf tidak berarah
+        graph[v].push_back(u); // graf tidak berarah
     }
 
     int S, K;
@@ -25,49 +22,48 @@ int main() {
     cin >> S >> K;
 
     vector<bool> visited(V, false);
-
     queue<pair<int, int>> q;
-
     visited[S] = true;
     q.push(make_pair(S, 0));
 
-    vector<int> infectedAtK;
+    vector<int> terinfeksiPadaHariK;
 
     while (!q.empty()) {
         pair<int, int> front = q.front();
         q.pop();
 
-        int node = front.first; 
-        int day = front.second; 
+        int node = front.first;
+        int day = front.second;
 
         if (day == K) {
-            infectedAtK.push_back(node);
-            continue; 
+            terinfeksiPadaHariK.push_back(node);
+            continue;
         }
 
         for (int i = 0; i < graph[node].size(); i++) {
-            int neighbor = graph[node][i];
-            if (!visited[neighbor]) {
-                visited[neighbor] = true;
-                q.push(make_pair(neighbor, day + 1)); // akan tertular besoknya
+            int tetangga = graph[node][i];
+            if (!visited[tetangga]) {
+                visited[tetangga] = true;
+                q.push(make_pair(tetangga, day + 1));
             }
         }
     }
 
     cout << "Node terinfeksi: ";
-    if (infectedAtK.empty()) {
+    if (terinfeksiPadaHariK.empty()) {
         cout << "(TIDAK ADA)" << endl;
     } else {
-        sort(infectedAtK.begin(), infectedAtK.end());
-        for (int i = 0; i < infectedAtK.size(); i++) {
+        sort(terinfeksiPadaHariK.begin(), terinfeksiPadaHariK.end());
+        for (int i = 0; i < terinfeksiPadaHariK.size(); i++) {
             if (i > 0) cout << " ";
-            cout << infectedAtK[i];
+            cout << terinfeksiPadaHariK[i];
         }
         cout << endl;
     }
 
     return 0;
 }
+
 
 /*
 Penjelasan Algoritma/Logika Penyelesaian:
